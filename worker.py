@@ -2,7 +2,6 @@ from celery import Celery
 
 import os
 
-
 rabbitmq_host = os.environ['RABBITMQ_PORT_5672_TCP_ADDR']
 mongodb_host = os.environ['MONGODB_PORT_27017_TCP_ADDR']
 
