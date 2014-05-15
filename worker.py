@@ -31,6 +31,13 @@ def dataset_blocks():
 
 @app.task
 def store_revisions(page_url):
+  """
+  Retrieve all the revision of a give wikipedia page_url
+
+  parameters:
+    - page_url: a wikipedia page URL
+  """
+
   p = Page()
 
   d = Dataset( "%s:27017" % (mongodb_host) )
@@ -42,7 +49,11 @@ def store_revisions(page_url):
 
   revisions = p.get_all_editors()
 
+  i = 0
+
   for revision in revisions:
+    i += 1
+
     # ex: en/crimea/revision/999999
     key = "%s/%s/revision/%s" % (lang,title,revision["revid"])
 
@@ -51,3 +62,5 @@ def store_revisions(page_url):
 
     # write in it the database handler
     d.write(key, value)
+    self.update_state( state='PROGRESS',
+      meta= { 'current': i, 'total': len(revisions)})
