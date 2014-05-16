@@ -1,3 +1,5 @@
 from worker import store_revisions
 
-store_revisions.delay("http://en.wikipedia.org/wiki/Crimea")
+for page_url in open("/data/sources/wicrimea-seeds.extended.txt", "r"):
+  print page_url.strip()
+  store_revisions.delay(page_url.strip())

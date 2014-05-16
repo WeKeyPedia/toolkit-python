@@ -29,8 +29,8 @@ app.conf.update(
 def dataset_blocks():
   pass
 
-@app.task
-def store_revisions(page_url):
+@app.task(bind=True)
+def store_revisions(self, page_url):
   """
   Retrieve all the revision of a give wikipedia page_url
 
