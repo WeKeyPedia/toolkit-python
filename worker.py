@@ -50,7 +50,7 @@ def dataset_timeline(url):
   print "start: %s" % (timeline[0])
   print "end: %s" % (timeline[-1])
 
-  k = "%s/timeline" % (url)
+  k = "%s/%s/timeline" % (lang, title)
   d.write(k, timeline)
 
   print r.count()
