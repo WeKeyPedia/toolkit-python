@@ -33,6 +33,8 @@ def dataset_timeline(url):
   title = url2title(url)
   lang = url2lang(url)
 
+  url = "%s/%s" % (lang, title)
+
   regex_string = "%s\/%s\/revision/([0-9]*$)" % (lang, title)
 
   r = d.find({ "url" : { "$regex" : regex_string } }, { "dataset.timestamp" : 1, "dataset.revid" : 1 })

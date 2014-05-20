@@ -26,18 +26,32 @@ def build_blocks():
   for revision in all_revisions:
     key =  "%s/blocks" % ( revision["url"] )
 
-    test = db.datasets.find_one({ "url" : key })
+    #test = db.datasets.find_one({ "url" : key })
 
-    print revision["url"].encode("utf8")
+    #print revision["url"].encode("utf8")
 
-    if test is None:
-      print "... computing!"  
+    #if test is None:
+    # print "... computing!"  
 
       #print revision["dataset"][0]["*"]
-      dataset_blocks.delay(revision["url"])
+    dataset_blocks.delay(revision["url"])
 
 def build_timelines():
-  for page_url in open("/data/sources/wicrimea-seeds.extended.txt", "r"):
+  for page_url in open("../../../data/sources/wicrimea-seeds.extended.txt", "r"):
     dataset_timeline.delay(page_url.strip())
 
-build_timelines()
+def build_latest_blocks():
+  all_timelines = db.datasets.find({ "url": {"$regex": "^([a-z]*)\/(.*)\/timeline$"} })
+
+  for timeline in all_timelines:
+    s =  timeline["url"].split("/")
+    revid = timeline["dataset"][-1]["revid"]
+    url = "%s/%s/revision/%s" % (s[0], s[1], revid)
+
+    rev = db.datasets.find_one({ "url": url })
+    dataset_blocks(url)
+
+# build_revisions()
+# build_blocks()
+# build_timelines()
+build_latest_blocks()
