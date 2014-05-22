@@ -19,9 +19,14 @@ class Dataset():
     }
 
     try:
+      print "inserting: %s" % (key)
       self.db.datasets.insert(item)
     except DuplicateKeyError:
-      print "duplicated entry: %s" % (key)
+      # print "duplicated entry: %s" % (key)
+      pass
+
+  def delete(self,key):
+    self.db.datasets.remove({ "url": key })
 
   def read(self, key):
     item = {

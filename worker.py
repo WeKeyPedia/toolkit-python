@@ -51,6 +51,7 @@ def dataset_timeline(url):
   print "end: %s" % (timeline[-1])
 
   k = "%s/%s/timeline" % (lang, title)
+  d.delete(k)
   d.write(k, timeline)
 
   print r.count()
@@ -109,3 +110,42 @@ def store_revisions(self, page_url):
     d.write(key, value)
     self.update_state( state='PROGRESS',
       meta= { 'current': i, 'total': len(revisions)})
+
+@app.task
+def store_last_revisions(db_url):
+  d = Dataset( "%s:27017" % (mongodb_host) )
+
+  url = db_url.replace("/timeline", "")
+
+  (lang, page) = url.split("/")
+
+  p = Page()
+  p.fetch_from_api_title(page, lang=lang)
+
+  last_rev = p.get_revisions(extra_params={ "rvlimit" : 1 })
+
+  print "last revisions: %s" % (url.encode("utf8"))
+
+  t = list(d.find({ "url": db_url }, { "url" : 1, "dataset" : { "$slice": -1 } }))
+
+  # print t[0]
+
+
+  extra_params = {
+    "rvstartid": t[0]["dataset"][0]["revid"],
+    "rvendid": last_rev[0]["revid"],
+    "rvdir": "newer"
+  }
+
+
+  print extra_params
+
+  revs = p.get_revisions(extra_params=extra_params)
+
+  print "%s new revisions since %s (%s)" % (len(revs), t[0]["dataset"][0]["timestamp"], t[0]["dataset"][0]["revid"])
+
+  for r in revs:
+    key = "%s/%s/revision/%s" % (lang, page, r["revid"])
+    value = [ r ]
+
+    d.write(key, value)
