@@ -130,19 +130,18 @@ def store_last_revisions(db_url):
 
   # print t[0]
 
-
   extra_params = {
     "rvstartid": t[0]["dataset"][0]["revid"],
     "rvendid": last_rev[0]["revid"],
     "rvdir": "newer"
   }
 
-
   print extra_params
 
   revs = p.get_revisions(extra_params=extra_params)
 
   print "%s new revisions since %s (%s)" % (len(revs), t[0]["dataset"][0]["timestamp"], t[0]["dataset"][0]["revid"])
+  print "%s  ---->  %s" % (t[0]["dataset"][0]["timestamp"], last_rev[0]["timestamp"])
 
   for r in revs:
     key = "%s/%s/revision/%s" % (lang, page, r["revid"])

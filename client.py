@@ -47,6 +47,8 @@ def build_latest_blocks():
     revid = timeline["dataset"][0]["revid"]
     url = "%s/%s/revision/%s" % (s[0], s[1], revid)
 
+    print url.encode("utf8")
+
     rev = db.datasets.find_one({ "url": url })
     dataset_blocks.delay(url)
 
@@ -68,5 +70,5 @@ def build_last_revisions():
 # build_revisions()
 # build_blocks()
 # build_last_revisions()
-build_timelines()
+# build_timelines()
 build_latest_blocks()
