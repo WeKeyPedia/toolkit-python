@@ -15,12 +15,23 @@ fetch a list of urls from the [wekeypedia API](https://github.com/WeKeyPedia/api
 $ python complete_info.py
 ```
 
-## workers
+## workers and distributed mode
 
-### examples
+The toolkit provide a worker/client mode in order to use the scripts across a computing grid. To use that architecture, you will need to install [celery](http://celeryproject.org).
 
-launch 2 workers with one prefork cpu each:
+- how to connect to the right broker -> rabbitmq
+- how to connect to datasets -> mongodb
+
+usages of env variables.
+
+### start a worker
 
 ```
-$ celery multistart w1 w2 -c 1
+celery -A worker worker
+```
+
+### use the client
+
+```
+python client.py <command>
 ```
