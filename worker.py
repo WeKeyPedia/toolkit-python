@@ -1,11 +1,14 @@
 from celery import Celery
 
 import os
+import json
 
 from wekeypedia.wikipedia_page import WikipediaPage as Page, url2title, url2lang
 from wekeypedia.parser.mediawiki import Mediawiki as mw
 from wekeypedia.dataset import Dataset
 
+import synapseclient
+from synapseclient import File
 
 rabbitmq_host = os.environ['RABBITMQ_PORT_5672_TCP_ADDR']
 mongodb_host = os.environ['MONGODB_PORT_27017_TCP_ADDR']
@@ -148,3 +151,28 @@ def store_last_revisions(db_url):
     value = [ r ]
 
     d.write(key, value)
+
+@app.task
+def export_synapse():
+  syn = synapseclient.Synapse()
+  syn.login()
+
+  project = syn.get("syn2483395")
+
+  d = Dataset( "%s:27017" % (mongodb_host) )
+
+  revisions = d.find({ "url" : { "$regex" : "en/Crimea/revision/([0-9]*)$" } }, { "url":1, "dataset": 1 })
+
+  print "uploading %s files to SYNAPSE" % (revisions.count())
+
+  for revision in revisions[0:100]:
+    file_id = revision["url"].split("/")[3]
+
+    revision_file = open("/data/temp/%s.json" % (file_id), 'w')
+    print "revision: %s" % (revision["url"])
+    del revision["_id"]
+
+    json.dump(revision, revision_file)
+
+    syn.store(File("/data/temp/%s.json" % (file_id), parent=project))
+    # os.remove("/data/temp/%s.json" % (file_id))

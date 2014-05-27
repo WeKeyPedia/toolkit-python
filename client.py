@@ -3,7 +3,7 @@
 import re
 import os
 
-from worker import store_revisions, store_last_revisions, dataset_blocks, dataset_timeline
+from worker import *
 from pymongo import MongoClient
 
 
@@ -67,8 +67,13 @@ def build_last_revisions():
 #    print tl["dataset"][0]
     store_last_revisions.delay( url )  
 
+def cmd_export_synapse():
+  export_synapse()
+
 # build_revisions()
 # build_blocks()
 # build_last_revisions()
 # build_timelines()
-build_latest_blocks()
+# build_latest_blocks()
+
+cmd_export_synapse()
