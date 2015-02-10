@@ -15,6 +15,14 @@ fetch a list of urls from the [wekeypedia API](https://github.com/WeKeyPedia/api
 $ python complete_info.py
 ```
 
+## using virtualenv
+
+```
+$ virtualenv e/py --no-site-packages
+$ source e/py/bin/activate
+(py)$ pip install -r requirements.txt
+```
+
 ## workers and distributed mode
 
 The toolkit provide a worker/client mode in order to use the scripts across a computing grid. To use that architecture, you will need to install [celery](http://celeryproject.org).
