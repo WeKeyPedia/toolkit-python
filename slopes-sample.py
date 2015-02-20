@@ -3,6 +3,7 @@ import os
 import codecs
 import sys
 import urllib
+import json
 
 from wekeypedia.wikipedia_page import WikipediaPage as Page, url2title, url2lang
 from wekeypedia.wikipedia_network import WikipediaNetwork
@@ -25,9 +26,12 @@ def fetch_page(source):
   print "📄  fetching: %s" % source.encode('utf-8')
 
   p = Page()
-  r = p.fetch_from_api_title(source.strip(), { "redirects":"true", "prop": "info|revisions", "inprop": "url", "rvprop": "content" })
+  r = p.fetch_from_api_title(source.strip(), { "redirects":"true", "rvparse" : "true", "prop": "info|revisions", "inprop": "url", "rvprop": "content" })
 
-  with codecs.open("path_points/%s.md" % (source), "w", "utf-8-sig") as file:
+  with open("path_points/%s.json" % (source), "w") as f:
+    json.dump(r, f)
+
+  with codecs.open("_path_points/%s.md" % (source), "w", "utf-8-sig") as file:
     file.write("---\n")
 
     # REWRITE ME
