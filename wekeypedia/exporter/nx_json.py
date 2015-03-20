@@ -1,3 +1,4 @@
+import codecs
 import json
 
 import networkx as nx
@@ -10,6 +11,6 @@ class NetworkxJson:
   def nx_export(self, export_type, output_file):
     data = getattr(json_graph, "%s_data" % export_type)(self.graph)
 
-    target = open(output_file, "w")
-    json.dump(data,target, sort_keys=True, indent=2)
+    target = codecs.open(output_file, "w", "utf-8")
+    json.dump(data,target, sort_keys=True, indent=2, ensure_ascii=False)
     print "export node-link: %s" % output_file
