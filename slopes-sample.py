@@ -23,7 +23,7 @@ exporter.nx_export("adjacency", "_data/network.json")
 print ""
 
 def fetch_page(source):
-  print "📄  fetching: %s" % source.encode('utf-8')
+  print "📄  fetching: %s" % source.encode('utf-8-sig')
 
   p = Page()
   r = p.fetch_from_api_title(source.strip(), { "redirects":"true", "rvparse" : "true", "prop": "info|revisions", "inprop": "url", "rvprop": "content" })
@@ -54,5 +54,5 @@ def fetch_page(source):
       file.write(result["revisions"][0]["*"])
 
 
-for k in hl.keywords:
-  fetch_page(k)
+# for k in hl.keywords:
+#   fetch_page(k)
