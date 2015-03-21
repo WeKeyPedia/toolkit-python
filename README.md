@@ -1,4 +1,4 @@
-WeKeyPedia python toolkit [![Build Status](https://travis-ci.org/WeKeyPedia/WKP-python-toolkit.svg?branch=master)](https://travis-ci.org/WeKeyPedia/WKP-python-toolkit) [![Coverage Status](https://coveralls.io/repos/WeKeyPedia/WKP-python-toolkit/badge.png?branch=master)](https://coveralls.io/r/WeKeyPedia/WKP-python-toolkit?branch=master)
+WeKeyPedia python toolkit [![Build Status](https://travis-ci.org/WeKeyPedia/toolkit-python.svg?branch=master)](https://travis-ci.org/WeKeyPedia/toolkit-python) [![Coverage Status](https://coveralls.io/repos/WeKeyPedia/toolkit-python/badge.png?branch=master)](https://coveralls.io/r/WeKeyPedia/toolkit-python?branch=master)
 ===================
 
 ## basic tasks
