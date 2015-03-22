@@ -8,6 +8,7 @@ import requests
 
 from colorama import Fore
 
+from datetime import date
 
 def url2title(url):
   title = url.split("/")
@@ -190,6 +191,36 @@ class WikipediaPage:
       langlinks += page["langlinks"]
 
     return langlinks
+
+  def get_pageviews(self, fr="200712", to=""):
+    results = []
+
+    base_url = "http://stats.grok.se/json/%s" % (self.lang)
+
+    if (to == ""):
+      year_end = date.today().year
+      month_end = date.today().month
+    else:
+      year_end = int(to[:4])
+      month_end = int(to[4:])
+
+    year_start = int(fr[:4])
+    month_start = int(fr[4:])
+
+    # print "from: %(year)4d-%(month)02d" % { "year": year_start, "month": month_start }
+    # print "to: %(year)4d-%(month)02d" % { "year": year_end, "month": month_end }
+
+    for y in range(year_start, year_end+1):
+      m_start = month_start if (y == year_start) else 1
+      m_end = month_end if (y == year_end) else 12
+
+      for m in range(m_start, m_end+1):
+        month_url = "%(url)s/%(year)4d%(month)02d/%(title)s" % { "url": base_url, "year": y, "month": m, "title": self.title }
+        # print month_url
+        r = requests.get(month_url).json()
+        results.append(r["daily_views"])
+
+    return results
 
 
   def links(self):
