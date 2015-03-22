@@ -6,3 +6,12 @@ wekeypedia/dataset.py
 wekeypedia/wikipedia_network.py
 wekeypedia/wikipedia_page.py
 wekeypedia/wikipedia_user.py
+wekeypedia/exporter/__init__.py
+wekeypedia/exporter/mapping.py
+wekeypedia/exporter/nx_json.py
+wekeypedia/importer/__init__.py
+wekeypedia/importer/neo4j.py
+wekeypedia/importer/wkp_api.py
+wekeypedia/parser/__init__.py
+wekeypedia/parser/dataset.py
+wekeypedia/parser/mediawiki.py
