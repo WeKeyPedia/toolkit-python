@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'wekeypedia',
   packages = ['wekeypedia'], # this must be the same as the name above
-  version = '0.1',
+  version = '0.1.0',
   description = 'toolkit to build datasets around wikipedia pages and to compute extra metrics',
   author = 'tam kien duong',
   author_email = 'tk@deveha..com',
