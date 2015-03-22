@@ -32,14 +32,29 @@ def fetch_revisions(source):
   with codecs.open("data/wikipedia-geometry/revisions/%s.json" % (source), "w", "utf-8-sig") as f:
     json.dump(r, f)  
 
-pool = ThreadPool(8)
+def fetch_pageviews(source):
+  if os.path.exists("data/wikipedia-geometry/pageviews/%s.json" % (source)) == False:
+    print "📄  fetching pageviews: %s" % source.encode('utf-8-sig')
+
+    p = Page()
+    p.fetch_from_api_title(source.strip())
+    r = p.get_pageviews()  
+
+    with codecs.open("data/wikipedia-geometry/pageviews/%s.json" % (source), "w", "utf-8-sig") as f:
+      json.dump(r, f)
+
+pool = ThreadPool(4)
 
 for p in specialization:
   # fetch_page(p["pagename"])
   # fetch_revisions(p["pagename"])
+  # fetch_pageviews(p["pagename"])
 
   pool.apply_async(fetch_page, args=(p["pagename"],))
   pool.apply_async(fetch_revisions, args=(p["pagename"],))
+
+  # this one is particulary slow. skip it for demo purposes
+  # pool.apply_async(fetch_pageviews, args=(p["pagename"],))
 
 pool.close()
 pool.join()
