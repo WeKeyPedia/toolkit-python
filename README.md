@@ -1,6 +1,24 @@
 WeKeyPedia python toolkit [![Build Status](https://travis-ci.org/WeKeyPedia/toolkit-python.svg?branch=master)](https://travis-ci.org/WeKeyPedia/toolkit-python) [![Coverage Status](https://coveralls.io/repos/WeKeyPedia/toolkit-python/badge.png?branch=master)](https://coveralls.io/r/WeKeyPedia/toolkit-python?branch=master)
 ===================
 
+## examples and macros
+
+You can explore the different current usages of the library by getting a look at the current we are using to build various datasets.
+
+- [retrieve_wikipedia_network.py](https://github.com/WeKeyPedia/toolkit-python/blob/master/retrieve_wikipedia_network.py)
+  - takes a file with a list of wikipedia pages
+  - retrieve the hyperlinks network
+  - store them in networkx format
+- **WIP** [analysis-data.py](https://github.com/WeKeyPedia/toolkit-python/blob/master/analysis-data.py)
+  - take a pre-existing dataset and fetch page contents, revision logs and page view statistics
+  - this script is used to produce the data for our [data science python notebooks](https://github.com/WeKeyPedia/notebooks). It is mainly an explorary work to find new metrics
+- [convert2blocks.py](https://github.com/WeKeyPedia/toolkit-python/blob/master/convert2blocks.py)
+  - takes a pre-existing file based dataset and produce blocks representations for the [synchronology](https://github.com/WeKeyPedia/synchronology) data visualization
+- [wicrimea.py](https://github.com/WeKeyPedia/toolkit-python/blob/master/wicrimea.py)
+  - fetch contents and data for the analysis of wikipedia pages involved in the current events about Crimea, Ukrain and Russia
+- **WIP** [slopes-sample.py](https://github.com/WeKeyPedia/toolkit-python/blob/master/slopes-sample.py)
+  - produce the dataset for [the ski slopes UI prototype](https://github.com/WeKeyPedia/slopes-builder)
+
 ## basic tasks
 
 provide a list of keywords and get the network structure from wikipedia
