@@ -7,7 +7,7 @@ setup(
   author = 'tam kien duong',
   author_email = 'tk@deveha..com',
   url = 'https://github.com/wekeypedia/toolkit-pyton', # use the URL to the github repo
-  download_url = 'https://github.com/peterldowns/mypackage/tarball/0.1', # I'll explain this in a second
+  download_url = 'https://github.com/WeKeyPedia/toolkit-python/archive/0.1.0.tar.gz', # I'll explain this in a second
   keywords = ['wikipedia', 'information retrieval', 'api', "data"], # arbitrary keywords
   classifiers = [],
 )
