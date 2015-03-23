@@ -1,7 +1,9 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
+
 setup(
   name = 'wekeypedia',
-  packages = ['wekeypedia'], # this must be the same as the name above
+#  packages = ['wekeypedia'], # this must be the same as the name above
+  packages = find_packages(exclude=["test*"]), # this must be the same as the name above
   version = '0.1.2',
   description = 'toolkit to build datasets around wikipedia pages and to compute extra metrics',
   author = 'tam kien duong',
