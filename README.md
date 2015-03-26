@@ -1,4 +1,4 @@
-WeKeyPedia python toolkit [![Build Status](https://travis-ci.org/WeKeyPedia/toolkit-python.svg?branch=master)](https://travis-ci.org/WeKeyPedia/toolkit-python) [![Coverage Status](https://coveralls.io/repos/WeKeyPedia/toolkit-python/badge.png?branch=master)](https://coveralls.io/r/WeKeyPedia/toolkit-python?branch=master)
+WeKeyPedia python toolkit [![Build Status](https://travis-ci.org/WeKeyPedia/toolkit-python.svg?branch=master)](https://travis-ci.org/WeKeyPedia/toolkit-python) [![Coverage Status](https://coveralls.io/repos/WeKeyPedia/toolkit-python/badge.svg?branch=master)](https://coveralls.io/r/WeKeyPedia/toolkit-python?branch=master)
 ===================
 
 ## examples and macros
