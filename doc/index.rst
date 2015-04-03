@@ -6,22 +6,30 @@
 WeKeyPedia python toolkit documentation
 =======================================
 
-Contents:
+The wekeypedia python toolkit is a set of class and helpers that have been written during the overall `wekeypedia project <http://wekeypedia>`_.
+
+Its main features are :
+
+- data retrieval from the wikipedia API and third party (statistics, semantic web, etc)
+- statistics about pages and users
+- network modelling
+
+contents:
 
 .. toctree::
-   :maxdepth: 2
+  :maxdepth: 2
+  
+  references/page
+  references/user
 
-   references/page
+todo list:
 
 .. todolist::
 
 
-coverage: 
-
 .. Indices and tables
-  ==================
+.. ==================
 
-  * :ref:`genindex`
-  * :ref:`modindex`
-  * :ref:`search`
-
+.. * :ref:`genindex`
+.. * :ref:`modindex`
+.. * :ref:`search`

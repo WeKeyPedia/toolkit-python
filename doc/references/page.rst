@@ -1,11 +1,11 @@
 **************
-Wikipedia page
+wikipedia page
 **************
 
 .. autoclass:: wekeypedia.wikipedia_page.WikipediaPage
    :members:
 
-Helpers
+helpers
 =======
 
 .. autofunction:: wekeypedia.wikipedia_page.url2title
