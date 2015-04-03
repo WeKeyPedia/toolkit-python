@@ -3,7 +3,7 @@ import sys
 
 import wikipedia
 import urllib
-
+from bs4 import BeautifulSoup
 import requests
 
 from colorama import Fore
@@ -11,6 +11,17 @@ from colorama import Fore
 from datetime import date
 
 def url2title(url):
+  """
+  Transform an url into a title
+
+  Parameters
+  ----------
+  url : string
+
+  Returns
+  -------
+  title : string
+  """
   title = url.split("/")
 
   if(len(title) > 4):
@@ -24,6 +35,17 @@ def url2title(url):
   return title
 
 def url2lang(url):
+  """
+  Transform an language code into a title
+
+  Parameters
+  ----------
+  url : string
+
+  Returns
+  -------
+  lang : string
+  """
   lang = url.split("/", 3)[2]
   lang = lang.split(".")[0]
   
@@ -132,6 +154,15 @@ class WikipediaPage:
     return revisions
 
   def get_revisions(self, extra_params={}):
+    """
+    Parameters
+    ----------
+    extra_params : dictionary
+
+    Returns
+    -------
+    revisions : list
+    """
     url = "http://%s.wikipedia.org/w/api.php" % (self.lang)
 
     params = {
@@ -193,6 +224,25 @@ class WikipediaPage:
     return langlinks
 
   def get_pageviews(self, fr="200712", to=""):
+    """
+    Retrieve daily page view statistics from http://stats.grok.se/
+
+    Parameters
+    ----------
+    fr : string
+      Start of the range (minimum is december 2007) represented as `yearmonth` (`%Y%m`).
+
+    to : string
+      End of the range represented as `yearmonth` (`%Y%m`).
+
+      If no end date is given, the current date is used as an end date.
+
+    Returns
+    -------
+    pageviews : list
+      List of page views per day represented as tuples `[(day, views),...]`
+
+    """
     results = []
 
     base_url = "http://stats.grok.se/json/%s" % (self.lang)
@@ -222,7 +272,38 @@ class WikipediaPage:
 
     return results
 
+  # get links using the content and the API
+  def get_links(self):
+    """
+      Retrieve content of a page and return a list of hyperlinks titles
 
+      todo: make the use of `self.title` more coherent
+
+      Parameters
+      ----------
+
+      Returns
+      -------
+        links : list
+          list of titles extracted from the `title="..."` attribute of `<a>` tags
+    """
+    links = []
+
+    json = self.fetch_from_api_title(self.title, { "redirects":"true", "rvparse" : "true", "prop": "info|revisions", "inprop": "url", "rvprop": "content" })
+
+    content = json["query"]["pages"][json["query"]["pages"].keys()[0]]
+    content = content["revisions"][0]["*"]
+    content = BeautifulSoup(content, 'html.parser') 
+
+    links = content.find_all('a')
+    links = map(lambda x: x.get("title"), links)
+
+    links = list(set(links))
+    links = [ l for l in links if l != None ]
+
+    return links
+
+  # get links using the wikipedia library
   def links(self):
     links = []
 
