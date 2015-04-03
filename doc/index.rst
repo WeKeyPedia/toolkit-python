@@ -6,7 +6,7 @@
 WeKeyPedia python toolkit documentation
 =======================================
 
-The wekeypedia python toolkit is a set of class and helpers that have been written during the overall `wekeypedia project <http://wekeypedia>`_.
+The wekeypedia python toolkit is a set of class and helpers that have been written during the overall `wekeypedia project <http://wekeypedia.net>`_.
 
 Its main features are :
 
@@ -15,14 +15,24 @@ Its main features are :
 - network modelling
 
 contents:
-
+---------
 .. toctree::
   :maxdepth: 2
   
   references/page
   references/user
 
+installation (with virtual env)
+-------------------------------
+
+.. code-block:: shell
+
+  $ virtualenv e/py --no-site-packages
+  $ source e/py/bin/activate
+  (py)$ pip install wekeypedia
+
 todo list:
+----------
 
 .. todolist::
 
