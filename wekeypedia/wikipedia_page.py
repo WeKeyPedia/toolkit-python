@@ -229,10 +229,10 @@ class WikipediaPage:
 
     Parameters
     ----------
-    fr : string
+    fr : string, optional
       Start of the range (minimum is december 2007) represented as `yearmonth` (`%Y%m`).
 
-    to : string
+    to : string, optional
       End of the range represented as `yearmonth` (`%Y%m`).
 
       If no end date is given, the current date is used as an end date.
@@ -275,17 +275,17 @@ class WikipediaPage:
   # get links using the content and the API
   def get_links(self):
     """
-      Retrieve content of a page and return a list of hyperlinks titles
+    Retrieve content of a page and return a list of hyperlinks titles
 
-      todo: make the use of `self.title` more coherent
+    todo: make the use of `self.title` more coherent
 
-      Parameters
-      ----------
+    Parameters
+    ----------
 
-      Returns
-      -------
-        links : list
-          list of titles extracted from the `title="..."` attribute of `<a>` tags
+    Returns
+    -------
+      links : list
+        list of titles extracted from the `title="..."` attribute of `<a>` tags
     """
     links = []
 
