@@ -58,6 +58,8 @@ class WikipediaPage:
     self.page = None
     self.problem = None
 
+    self.content = ""
+
     self.lang = "en"
 
     if (title):
@@ -153,6 +155,25 @@ class WikipediaPage:
 
     return revisions
 
+  def get_content(self):
+    """
+    Returns
+    -------
+    content : string
+    """
+    if self.content != "":
+      content = self.content
+    else:
+      json = self.fetch_from_api_title(self.title, { "redirects":"true", "rvparse" : "true", "prop": "info|revisions", "inprop": "url", "rvprop": "content" })
+
+      content = json["query"]["pages"][json["query"]["pages"].keys()[0]]
+      content = content["revisions"][0]["*"]
+      content = BeautifulSoup(content, 'html.parser')
+
+    self.content = content
+
+    return content
+
   def get_revisions(self, extra_params={}):
     """
     Parameters
@@ -200,6 +221,13 @@ class WikipediaPage:
     return revisions
 
   def get_langlinks(self):
+    """ Fetch the list of hyperlinks to translation of the current page
+
+    Returns
+    -------
+    langlinks : list
+
+    """
     langlinks = []
 
     url = "http://%s.wikipedia.org/w/api.php" % (self.lang)
@@ -272,8 +300,15 @@ class WikipediaPage:
 
     return results
 
-  # get links using the content and the API
+
   def get_links(self):
+    content = self.get_content()
+
+    links = content.find_all('a')
+
+    return links
+
+  def get_links_title(self):
     """
     Retrieve content of a page and return a list of hyperlinks titles
 
@@ -289,13 +324,9 @@ class WikipediaPage:
     """
     links = []
 
-    json = self.fetch_from_api_title(self.title, { "redirects":"true", "rvparse" : "true", "prop": "info|revisions", "inprop": "url", "rvprop": "content" })
+    content = self.get_content()
 
-    content = json["query"]["pages"][json["query"]["pages"].keys()[0]]
-    content = content["revisions"][0]["*"]
-    content = BeautifulSoup(content, 'html.parser') 
-
-    links = content.find_all('a')
+    links = self.get_links()
     links = map(lambda x: x.get("title"), links)
 
     links = list(set(links))
