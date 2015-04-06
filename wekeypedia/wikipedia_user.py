@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-
-import requests
+from wekeypedia.wikipedia_api import api as API
 
 class WikipediaUser:
   """ create a new wikipedia user object
@@ -23,7 +22,7 @@ class WikipediaUser:
 
   def fetch_contribs(self):
     """ get all contributions from a user """
-    url = "http://%s.wikipedia.org/w/api.php" % (self.lang)
+    api = API()
 
     contribs = []
 
@@ -37,7 +36,7 @@ class WikipediaUser:
     }
 
     while True:
-      r = requests.get(url, params=params).json()
+      r = api.get(url, params=params)
       contribs += r["query"]["usercontribs"]
 
       if "continue" in r:
