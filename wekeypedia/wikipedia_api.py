@@ -3,8 +3,8 @@ import requests
 
 class api:
   """
-  Paramater
-  ---------
+  Parameters
+  ----------
   lang : string, optional
   """
 
@@ -14,8 +14,8 @@ class api:
 
   def get(self, query):
     """
-    Parameter
-    ---------
+    Parameters
+    ----------
     query : dict
 
     Returns

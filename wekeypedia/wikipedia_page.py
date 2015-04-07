@@ -242,7 +242,7 @@ class WikipediaPage:
 
     while True:
       r = api.get(params)
- 
+
       # print r
       pages = r["query"]["pages"]
       page = pages[ pages.keys()[0] ]
@@ -257,7 +257,8 @@ class WikipediaPage:
     return revisions
 
   def get_langlinks(self):
-    """ Fetch the list of hyperlinks to translation of the current page
+    """
+    Fetch the list of hyperlinks to translation of the current page
 
     Returns
     -------

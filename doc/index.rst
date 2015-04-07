@@ -26,6 +26,7 @@ contents:
 .. toctree::
   :maxdepth: 2
   
+  references/api
   references/page
   references/user
 
