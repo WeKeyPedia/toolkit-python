@@ -95,7 +95,7 @@ class WikipediaPage:
     return response
 
   def fetch_from_api_title(self, title, opt_params={ "prop": "info", "inprop": "url" }, lang="en"):
-    api = API()
+    api = API(lang)
 
     params = {
       "format": "json",
@@ -120,7 +120,7 @@ class WikipediaPage:
     # print r.url
     # print r.text
 
-    return r.json()
+    return r
 
   def get_all_editors(self):
     api = API()
@@ -266,7 +266,7 @@ class WikipediaPage:
       List of language codes (e.g "en", "fr", "es", "ru", etc)
       todo: put a link to a page with the list of languages
     """
-    api = API()
+    api = API(self.lang)
 
     langlinks = []
 

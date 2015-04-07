@@ -36,7 +36,7 @@ class WikipediaUser:
     }
 
     while True:
-      r = api.get(url, params=params)
+      r = api.get(params)
       contribs += r["query"]["usercontribs"]
 
       if "continue" in r:
