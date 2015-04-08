@@ -4,6 +4,11 @@ import sys
 import wikipedia
 import urllib
 
+try:
+  from urllib.parse import unquote
+except ImportError:
+  from urllib import unquote
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -30,7 +35,7 @@ def url2title(url):
   if(len(title) > 4):
     title = title[4]
     title = title.encode("ASCII")
-    title = urllib.unquote(title).decode("utf8")
+    title = unquote(title).decode("utf8")
     title = title.replace("_", " ")
   else:
     title = title[3]
