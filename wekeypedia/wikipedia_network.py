@@ -31,17 +31,17 @@ class WikipediaNetwork:
     concept  = r[0]
     links = r[1]
 
-    print "## %s" % concept
+    print("## %s" % concept)
 
     self.graph.add_node(concept)
 
     accepted_links = set(links) & set(self.keywords)
 
     for link in accepted_links:
-      print "-> %s" % link
+      print("-> %s" % link)
       self.graph.add_edge(concept, link)
 
-    print "\r"
+    print("\r")
 
   def build(self):
     pool = ThreadPool(8)

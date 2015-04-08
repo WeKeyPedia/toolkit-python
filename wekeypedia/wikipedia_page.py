@@ -3,6 +3,7 @@ import sys
 
 import wikipedia
 import urllib
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -82,15 +83,15 @@ class WikipediaPage:
     try:
       response["page"] = wikipedia.page(title)
 
-      print "wikipedia page: %s" % response["page"].title.encode("utf8")
-      print "\r"
+      print("wikipedia page: %s" % response["page"].title.encode("utf8"))
+      print("\r")
 
     except wikipedia.exceptions.DisambiguationError:
       response["problem"] = "ambiguity"
-      print Fore.YELLOW + "ambiguity"
+      print(Fore.YELLOW + "ambiguity")
     except wikipedia.exceptions.PageError:
       response["problem"] = "no match"
-      print Fore.YELLOW + "no match"
+      print(Fore.YELLOW + "no match")
 
     return response
 
@@ -100,19 +101,19 @@ class WikipediaPage:
     params = {
       "format": "json",
       "action": "query",
-      "titles": unicode(title)
+      "titles": u""+title
       # "rvprop": "content",
       # "redirects": ""
     }
 
-    params = dict(params.items() + opt_params.items())
+    params.update(opt_params)
 
     r = api.get(params)
     # print r.json()
 
     pages = r["query"]["pages"]
 
-    self.page_id = pages.keys()[0]
+    self.page_id = list(pages.keys())[0]
     self.title = pages[ self.page_id ]["title"]
     self.lang = lang
     self.url = pages[ self.page_id ]["fullurl"]
@@ -146,10 +147,11 @@ class WikipediaPage:
       r = api.get(current)
 
       pages = r["query"]["pages"]
+      keys = list(pages.keys())
 
-      if ("revisions" in pages[ pages.keys()[0] ]):
+      if ("revisions" in pages[ keys[0] ]):
         # print pages[ pages.keys()[0] ]["revisions"]
-        revisions = revisions + pages[ pages.keys()[0] ]["revisions"]
+        revisions = revisions + pages[ keys[0] ]["revisions"]
 
       if 'continue' not in r: break
 
@@ -200,7 +202,7 @@ class WikipediaPage:
 
     json = self.fetch_from_api_title(self.title, q)
 
-    content = json["query"]["pages"][json["query"]["pages"].keys()[0]]
+    content = json["query"]["pages"][list(json["query"]["pages"].keys())[0]]
     content = content["revisions"][0]["*"]
     content = BeautifulSoup(content, 'html.parser')
 
@@ -245,7 +247,7 @@ class WikipediaPage:
 
       # print r
       pages = r["query"]["pages"]
-      page = pages[ pages.keys()[0] ]
+      page = pages[ list(pages.keys())[0] ]
 
       revisions += page["revisions"]
       
@@ -282,7 +284,7 @@ class WikipediaPage:
 
     # print r
 
-    page = r["query"]["pages"][ r["query"]["pages"].keys()[0] ]
+    page = r["query"]["pages"][ list(r["query"]["pages"].keys())[0] ]
 
     if ("langlinks" in page):
       langlinks += page["langlinks"]

@@ -26,7 +26,7 @@ def test_direct_api():
 
   r = page.fetch_from_api_title("unit testing")
 
-  print r
+  # print r
 
   assert "-1" not in r["query"]["pages"]
 
@@ -35,7 +35,7 @@ def test_direct_api_no_match():
 
   r = page.fetch_from_api_title("bleepbloopzerg")
 
-  print r
+  # print r
 
   assert "-1" in r["query"]["pages"]
 
@@ -53,7 +53,7 @@ def test_api_get_specific_revision():
 
   revision = page.get_revisions(extra_params={ "rvstartid": revisions[0]["revid"], "rvlimit" : 1})
 
-  print revision
+  print(revision)
 
   assert len(revision) > 0
 
@@ -64,7 +64,7 @@ def test_api_get_revisions_with_continue():
 
   revision = page.get_revisions(extra_params={ "rvstartid": revisions[0]["revid"], "rvlimit" : 500, "continue": ""})
 
-  print revision
+  print(revision)
 
   assert len(revision) > 500
 
@@ -73,6 +73,6 @@ def test_api_langlinks():
   r = page.fetch_from_api_title("Jeu de go", lang="fr")
   langlinks = page.get_langlinks()
 
-  print langlinks
+  print(langlinks)
 
   assert len(langlinks) > 10
