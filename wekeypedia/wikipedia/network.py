@@ -1,4 +1,4 @@
-from wekeypedia.wikipedia_page import WikipediaPage
+from wekeypedia.wikipedia.page import WikipediaPage
 
 import networkx as nx
 

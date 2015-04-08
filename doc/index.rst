@@ -12,12 +12,16 @@ Its main features are :
 
 - data retrieval from the wikipedia API and third party (statistics, semantic web, etc)
 - statistics about pages and users
- * bots (coming with 0.2)
- * page and paragraph difficulty measures (coming with 0.2)
+
+ - bots (coming with 0.2)
+ - page and paragraph difficulty measures (coming with 0.2)
+
 - network modelling
- * hyperlink network (coming with 0.2)
- * page-editor bi-partite network (coming with 0.2)
- * page-word bi-partite network (coming with 0.3)
+
+ - hyperlink network (coming with 0.2)
+ - page-editor bi-partite network (coming with 0.2)
+ - page-word bi-partite network (coming with 0.3)
+
 - reading maps (coming next)
 - adaptative reading model (coming next)
 
@@ -26,9 +30,7 @@ contents:
 .. toctree::
   :maxdepth: 2
   
-  references/api
-  references/page
-  references/user
+  references/information_retrieval
 
 installation (with virtual env)
 -------------------------------

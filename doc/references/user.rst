@@ -2,5 +2,5 @@
 wikipedia user
 **************
 
-.. autoclass:: wekeypedia.wikipedia_user.WikipediaUser
+.. autoclass:: wekeypedia.wikipedia.user.WikipediaUser
   :members:

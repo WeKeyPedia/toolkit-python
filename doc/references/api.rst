@@ -2,5 +2,5 @@
 wikipedia api
 **************
 
-.. automodule:: wekeypedia.wikipedia_api
+.. automodule:: wekeypedia.wikipedia.api
    :members:

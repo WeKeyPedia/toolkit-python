@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from wekeypedia.wikipedia_api import api as API
+from wekeypedia.wikipedia.api import api as API
 
 class WikipediaUser:
   """ create a new wikipedia user object

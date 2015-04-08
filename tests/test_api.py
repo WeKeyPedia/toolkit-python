@@ -1,7 +1,7 @@
 from wekeypedia.importer.wkp_api import WeKeyApi as api
 
-from wekeypedia.wikipedia_page import url2title
-from wekeypedia.wikipedia_page import url2lang
+from wekeypedia.wikipedia.page import url2title
+from wekeypedia.wikipedia.page import url2lang
 
 # def test_api_pages():
 # 	a = api()

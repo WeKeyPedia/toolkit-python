@@ -16,7 +16,7 @@ from colorama import Fore
 
 from datetime import date
 
-from wekeypedia.wikipedia_api import api as API
+from wekeypedia.wikipedia.api import api as API
 
 def url2title(url):
   """
@@ -34,7 +34,7 @@ def url2title(url):
 
   if(len(title) > 4):
     title = title[4]
-    title = title.encode("ASCII")
+    title = title.encode("ascii")
     title = unquote(title).decode("utf8")
     title = title.replace("_", " ")
   else:
