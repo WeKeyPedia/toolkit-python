@@ -59,7 +59,10 @@ def url2lang(url):
   
   return lang
 
-class WikipediaPage:
+class WikipediaPage(object):
+  """
+  http://www.mediawiki.org/wiki/API:Query
+  """
   def __init__(self, title=None):
     self.ready = False
     self.query = None
@@ -167,7 +170,16 @@ class WikipediaPage:
   def get_content(self, revid="", force=False, extra_params = {}):
     """
     Get the current content of the page (content of the current revision) or
-    specific content if a revid is given as a parameter
+    specific content if a revid is given as a parameter.
+
+    For more paramaters, you can check the `wikipedia API <http://www.mediawiki.org/wiki/API:Revisions>`_
+    documentation.
+
+    Examples
+    --------
+
+    >>> p = WikipediaPage("Pi")
+    >>> p.get_content()
 
     Parameters
     ----------
@@ -215,6 +227,64 @@ class WikipediaPage:
       self.content = content
 
     return content
+
+  def get_diff(self, rev_id=""):
+    api = API(self.lang)
+
+    q = {
+      "format": "json",
+      "action": "query",
+      "titles": self.title,
+      "redirects":"true",
+      #"rvparse" : "true",
+      "prop": "info|revisions",
+      "inprop": "url",
+      # "rvlimit": 1,
+      "rvprop": "content",
+      "rvdiffto" : "prev"
+    }
+
+    if rev_id != "":
+      q.update({ "rvlimit":1, "rvstartid": rev_id })
+
+    r = api.get(q)
+
+    content = r["query"]["pages"][list(r["query"]["pages"].keys())[0]]
+    content = content["revisions"][0]["diff"]["*"]
+    # content = BeautifulSoup(content, 'html.parser')
+
+    return content
+
+  def get_revisions_info(self, extra_params={}):
+    api = API()
+
+    revisions = []
+
+    params = {
+      "format": "json",
+      "action": "query",
+      "titles": self.title,
+      "prop": "revisions",
+      "rvprop": "user|userid|timestamp|size|ids|sha1|comment",
+      "rvlimit": "max",
+      "redirects": "",
+      "continue": ""
+    }
+
+    while True:
+      r = api.get(params)
+
+      pages = r["query"]["pages"]
+      page = pages[ list(pages.keys())[0] ]
+
+      revisions += page["revisions"]
+
+      if "continue" in r:
+        params.update(r["continue"])
+      else:
+        break
+
+    return revisions
 
   def get_revisions(self, extra_params={}):
     """
