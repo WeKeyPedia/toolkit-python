@@ -16,12 +16,7 @@ import sys
 import os
 import shlex
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
-
-sys.path.append(os.path.abspath('..'))
+sys.path.append(os.path.abspath('../..'))
 import wekeypedia
 
 # -- General configuration ------------------------------------------------
@@ -34,6 +29,7 @@ import wekeypedia
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',    
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
@@ -45,7 +41,10 @@ extensions = [
 napoleon_numpy_docstring = True
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+autosummary_generate=True
+
+templates_path = ['templates', "../rst_templates"]
+
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -98,7 +97,7 @@ exclude_patterns = ['_build']
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-#add_module_names = True
+add_module_names = False
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.

@@ -61,7 +61,10 @@ def url2lang(url):
 
 class WikipediaPage(object):
   """
-  http://www.mediawiki.org/wiki/API:Query
+
+  - http://www.mediawiki.org/wiki/API:Query
+  - http://www.mediawiki.org/wiki/API:Revisions
+
   """
   def __init__(self, title=None):
     self.ready = False
@@ -221,14 +224,22 @@ class WikipediaPage(object):
 
     content = json["query"]["pages"][list(json["query"]["pages"].keys())[0]]
     content = content["revisions"][0]["*"]
-    content = BeautifulSoup(content, 'html.parser')
 
     if force == False:
       self.content = content
 
     return content
 
-  def get_diff(self, rev_id=""):
+  def get_diff_full(self, rev_id=""):
+    """
+    Return the full json response from a request for diff.
+
+    Parameters
+    ----------
+    rev_id : string, optional
+      If no revision id is supplied, the method retrieve the diff from the
+      current version of the page and compare it to its predecessor.
+    """
     api = API(self.lang)
 
     q = {
@@ -240,7 +251,50 @@ class WikipediaPage(object):
       "prop": "info|revisions",
       "inprop": "url",
       # "rvlimit": 1,
-      "rvprop": "content",
+      # "rvprop": "content",
+      "rvdiffto" : "prev"
+    }
+
+    if rev_id != "":
+      q.update({ "rvlimit":1, "rvstartid": rev_id })
+
+    r = api.get(q)
+
+    return r
+
+  def get_diff(self, rev_id=""):
+    """
+    Return diff content between a revision and its predecessor. The content is
+    extracted from the API json response. To get the full response, you can
+    still use `get_diff_full`
+
+    Parameters
+    ----------
+    rev_id : string, optional
+      If no revision id is supplied, the method retrieve the diff from the
+      current version of the page and compare it to its predecessor.
+
+    Returns
+    -------
+    content : string
+
+    See Also
+    --------
+    get_diff_full
+
+    """
+    api = API(self.lang)
+
+    q = {
+      "format": "json",
+      "action": "query",
+      "titles": self.title,
+      "redirects":"true",
+      #"rvparse" : "true",
+      "prop": "info|revisions",
+      "inprop": "url",
+      # "rvlimit": 1,
+      # "rvprop": "content",
       "rvdiffto" : "prev"
     }
 
@@ -250,12 +304,22 @@ class WikipediaPage(object):
     r = api.get(q)
 
     content = r["query"]["pages"][list(r["query"]["pages"].keys())[0]]
-    content = content["revisions"][0]["diff"]["*"]
+    if "diff" in content["revisions"][0]:
+      content = content["revisions"][0]["diff"]["*"]
+    else:
+      content = False
     # content = BeautifulSoup(content, 'html.parser')
 
     return content
 
-  def get_revisions_info(self, extra_params={}):
+  def get_revisions_list(self, extra_params={}):
+    """
+    Retrieve all the revisions and their info
+
+    Return
+    ------
+    revisions : list
+    """
     api = API()
 
     revisions = []
@@ -425,7 +489,18 @@ class WikipediaPage(object):
 
 
   def get_links(self):
+    """
+    Retrieve the content from the current revision and extract the list of
+    hyperlinks (`<a>` tags) from its content.
+
+    Returns
+    -------
+    links : list
+      list of links as parsed HTML. The full <a> representation is returned and
+      ready for further extraction
+    """
     content = self.get_content()
+    content = BeautifulSoup(content, 'html.parser')
 
     links = content.find_all('a')
 
@@ -433,12 +508,14 @@ class WikipediaPage(object):
 
   def get_links_title(self):
     """
-    Retrieve content of a page and return a list of hyperlinks titles
+    Retrieve content of a page, extract the links and return only the titles. In
+    the wikipedia context, title attributes correspond to title of pages.
 
     todo: make the use of `self.title` more coherent
 
-    Parameters
-    ----------
+    See Also
+    --------
+    get_links
 
     Returns
     -------
@@ -446,8 +523,6 @@ class WikipediaPage(object):
         list of titles extracted from the `title="..."` attribute of `<a>` tags
     """
     links = []
-
-    content = self.get_content()
 
     links = self.get_links()
     links = map(lambda x: x.get("title"), links)

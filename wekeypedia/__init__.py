@@ -1,2 +1,2 @@
-import wikipedia
-from wikipedia import *
+import wekeypedia.wikipedia
+from wekeypedia.wikipedia import *

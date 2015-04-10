@@ -8,7 +8,10 @@ from bs4 import BeautifulSoup
 
 from collections import defaultdict
 from multiprocessing import Pool as ThreadPool
+
 import codecs
+import json
+
 
 ignore_list = "{}()[]<>./,;\"':!?&#"
 
@@ -16,8 +19,9 @@ lemmatizer = nltk.WordNetLemmatizer()
 stemmer = nltk.stem.porter.PorterStemmer()
 
 # page =  "Michel Maffesoli"
-page =  "Love"
+# page =  "Love"
 # page = "War"
+page = "Ethics"
 
 p = wekeypedia.WikipediaPage()
 p.fetch_from_api_title(page)
@@ -30,7 +34,7 @@ inflections["added"] = defaultdict(set)
 inflections["deleted"] = defaultdict(set)
 
 def get_revs():
-  revisions = p.get_revisions_info()
+  revisions = p.get_revisions_list()
 
   return revisions
 
@@ -79,6 +83,10 @@ def rev_diff(revid):
 
   d = p.get_diff(revid)
 
+  # bug with Ethics#462124891
+  if d == False:
+    return ({},{}, { "added": [], "deleted": [] })
+
   d = BeautifulSoup(d, 'html.parser')
 
   # check additions of block
@@ -111,31 +119,50 @@ def rev_diff(revid):
 
   return (ad.items(),de.items(), { "added":inflections["added"], "deleted":inflections["deleted"] })
 
-rev_list = get_revs()
+
+def write_revdif(revid):
+  
+  data = p.get_diff_full(revid)
+  name = "data/%s/%s.json" % (page, revid)
+  
+  data = data["query"]["pages"][list(data["query"]["pages"].keys())[0]]
+  
+  if "diff" in data["revisions"][0]:
+    data = data["revisions"][0]
+    print revid
+    with codecs.open(name, "w", "utf-8-sig") as f:
+      json.dump(data, f, ensure_ascii=False, indent=2, separators=(',', ': '))
 
 # print len(rev_list)
 # print p.get_diff(rev_list[0]["revid"])
-# print rev_list[0]
-# print rev_diff(rev_list[0]["revid"])
+# print [ x["revid"] for x in rev_list ]
+# print rev_diff(462124891)
 # exit()
 
-pool = ThreadPool(8)
+rev_list = get_revs()
 
-result = pool.map(rev_diff, [ x["revid"] for x in rev_list ])
+pool = ThreadPool(4)
+
+#result = pool.map(rev_diff, [ x["revid"] for x in rev_list ])
+pool.map(write_revdif, [ x["revid"] for x in rev_list ])
 
 # for r in rev_list:
 #   rev_id = r["revid"]
-#   pool.apply_async( rev_diff, args=(rev_id, ), callback=red )
-#   # red(rev_diff(rev_id))
+#   # pool.apply_async( rev_diff, args=(rev_id, ), callback=red )
+#   red(rev_diff(rev_id))
 
 pool.close()
 pool.join()
 
+exit()
+
+print "## reduce results"
 for r in result:
   red(r)
 
 # print added
 
+print "## save consolidated data"
 #df1 = pd.DataFrame.from_dict(added, orient="index")
 df1 = pd.DataFrame([ [ x[1]["count"], x[1]["inflections"] ] for x in added.iteritems() ], index=added.keys())
 df1.columns = [ 'count', 'inflections']
