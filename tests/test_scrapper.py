@@ -68,3 +68,21 @@ def test_api_langlinks():
   print(langlinks)
 
   assert len(langlinks) > 10
+
+def test_diff():
+  page = WikipediaPage("Pi")
+  diff = page.get_diff()
+
+  assert len(diff) > 0
+
+def test_diff_full():
+  page = WikipediaPage("Pi")
+  diff = page.get_diff_full()
+
+  assert "query" in diff
+
+def test_pageviews():
+  page = WikipediaPage("Pi")
+  pageviews = page.get_pageviews(fr="201501")
+
+  assert len(pageviews) > 0
