@@ -108,41 +108,41 @@ class WikipediaPage(object):
 
     return r
 
-  def get_all_editors(self):
-    api = API()
+  # def get_all_editors(self):
+  #   api = API()
 
-    params = {
-      "format": "json",
-      "action": "query",
-      "titles": self.title,
-      "prop": "revisions",
-      "rvprop": "user|userid|timestamp|size|ids|sha1",
-      "rvlimit": "max",
-      "redirects": "",
-      "continue": ""
-    }
+  #   params = {
+  #     "format": "json",
+  #     "action": "query",
+  #     "titles": self.title,
+  #     "prop": "revisions",
+  #     "rvprop": "user|userid|timestamp|size|ids|sha1",
+  #     "rvlimit": "max",
+  #     "redirects": "",
+  #     "continue": ""
+  #   }
 
-    last = dict()
-    revisions = []
+  #   last = dict()
+  #   revisions = []
 
-    while True:
-      current = params.copy()
-      current.update(last)
+  #   while True:
+  #     current = params.copy()
+  #     current.update(last)
 
-      r = api.get(current)
+  #     r = api.get(current)
 
-      pages = r["query"]["pages"]
-      keys = list(pages.keys())
+  #     pages = r["query"]["pages"]
+  #     keys = list(pages.keys())
 
-      if ("revisions" in pages[ keys[0] ]):
-        # print pages[ pages.keys()[0] ]["revisions"]
-        revisions = revisions + pages[ keys[0] ]["revisions"]
+  #     if ("revisions" in pages[ keys[0] ]):
+  #       # print pages[ pages.keys()[0] ]["revisions"]
+  #       revisions = revisions + pages[ keys[0] ]["revisions"]
 
-      if 'continue' not in r: break
+  #     if 'continue' not in r: break
 
-      last = r["continue"]
+  #     last = r["continue"]
 
-    return revisions
+  #   return revisions
 
   def get_content(self, revid="", force=False, extra_params = {}):
     """
@@ -344,9 +344,8 @@ class WikipediaPage(object):
       "prop": "revisions",
       "rvprop": "user|userid|timestamp|size|ids|sha1|comment|content",
       "rvlimit": "max",
-      "redirects": ""
-      # ,
-      # "continue": ""
+      "redirects": "",
+      "continue": ""
     }
 
     params.update(extra_params)
