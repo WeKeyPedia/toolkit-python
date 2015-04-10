@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-import wikipedia
+# import wikipedia
 import urllib
 
 try:
@@ -66,7 +66,7 @@ class WikipediaPage(object):
   - http://www.mediawiki.org/wiki/API:Revisions
 
   """
-  def __init__(self, title=None):
+  def __init__(self, title=None, lang="en"):
     self.ready = False
     self.query = None
     self.page = None
@@ -74,39 +74,13 @@ class WikipediaPage(object):
 
     self.content = ""
 
-    self.lang = "en"
+    self.lang = lang
 
     if (title):
       title = title.strip()
+      self.fetch_info(title, lang=self.lang)
 
-      r = self.fetch_from_title(title)
-
-      if (r["problem"] != None):
-        self.problem = r["problem"]
-      else:
-        self.page = r["page"]
-        self.ready = True
-
-
-  def fetch_from_title(self, title):
-    response = { "page": None, "problem": None, }
-
-    try:
-      response["page"] = wikipedia.page(title)
-
-      print("wikipedia page: %s" % response["page"].title.encode("utf8"))
-      print("\r")
-
-    except wikipedia.exceptions.DisambiguationError:
-      response["problem"] = "ambiguity"
-      print(Fore.YELLOW + "ambiguity")
-    except wikipedia.exceptions.PageError:
-      response["problem"] = "no match"
-      print(Fore.YELLOW + "no match")
-
-    return response
-
-  def fetch_from_api_title(self, title, opt_params={ "prop": "info", "inprop": "url" }, lang="en"):
+  def fetch_info(self, title, opt_params={ "prop": "info", "inprop": "url" }, lang="en"):
     api = API(lang)
 
     params = {
@@ -220,7 +194,7 @@ class WikipediaPage(object):
     # add extra parameters to current query
     q.update(extra_params)
 
-    json = self.fetch_from_api_title(self.title, q)
+    json = self.fetch_info(self.title, q)
 
     content = json["query"]["pages"][list(json["query"]["pages"].keys())[0]]
     content = content["revisions"][0]["*"]
@@ -529,14 +503,5 @@ class WikipediaPage(object):
 
     links = list(set(links))
     links = [ l for l in links if l != None ]
-
-    return links
-
-  # get links using the wikipedia library
-  def links(self):
-    links = []
-
-    if (self.ready == True):
-      links = self.page.links
 
     return links

@@ -1,4 +1,4 @@
-from wekeypedia.importer.wkp_api import WeKeyApi as api
+# from wekeypedia.importer.wkp_api import WeKeyApi as api
 
 from wekeypedia.wikipedia.page import url2title
 from wekeypedia.wikipedia.page import url2lang

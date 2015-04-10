@@ -21,7 +21,7 @@ stemmer = nltk.stem.porter.PorterStemmer()
 # page =  "Michel Maffesoli"
 # page =  "Love"
 # page = "War"
-page = "Ethics"
+page = "Wisdom"
 
 p = wekeypedia.WikipediaPage()
 p.fetch_from_api_title(page)

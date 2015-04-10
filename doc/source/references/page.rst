@@ -14,7 +14,8 @@ Create a page handler
 .. autosummary::
    :toctree: generated/
 
-   WikipediaPage.fetch_from_api_title
+   WikipediaPage.__init__
+   WikipediaPage.fetch_info
 
 Retrieving current content and parts
 ------------------------------------

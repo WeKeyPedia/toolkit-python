@@ -25,7 +25,7 @@ class WikipediaNetwork:
       'problem' : w.problem
       })
 
-    return w.links()
+    return w.get_links_title()
 
   def method(self, r):
     concept  = r[0]
