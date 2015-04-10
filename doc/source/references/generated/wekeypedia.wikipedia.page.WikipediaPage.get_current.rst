@@ -1,6 +1,6 @@
-get_content
+get_current
 ===================================================
 
 .. currentmodule:: wekeypedia.wikipedia.page
 
-.. automethod:: WikipediaPage.get_content
+.. automethod:: WikipediaPage.get_current

@@ -54,7 +54,7 @@ def test_api_get_specific_revision():
 
   revisions = page.get_revisions_list()
 
-  revision = page.get_content(revisions[42]["revid"])
+  revision = page.get_revision(revisions[42]["revid"])
 
   print(revision)
 

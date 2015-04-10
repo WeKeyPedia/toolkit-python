@@ -144,10 +144,9 @@ class WikipediaPage(object):
 
   #   return revisions
 
-  def get_content(self, revid="", force=False, extra_params = {}):
+  def get_revision(self, revid="", force=False, extra_params = {}):
     """
-    Get the current content of the page (content of the current revision) or
-    specific content if a revid is given as a parameter.
+    Get the content of a revision by its revision id
 
     For more paramaters, you can check the `wikipedia API <http://www.mediawiki.org/wiki/API:Revisions>`_
     documentation.
@@ -203,6 +202,16 @@ class WikipediaPage(object):
       self.content = content
 
     return content
+
+  def get_current(self):
+    """
+    Get the content of the current revision
+
+    Return
+    ------
+    content : string
+    """
+    return self.get_revision()
 
   def get_diff_full(self, rev_id=""):
     """
@@ -472,7 +481,7 @@ class WikipediaPage(object):
       list of links as parsed HTML. The full <a> representation is returned and
       ready for further extraction
     """
-    content = self.get_content()
+    content = self.get_current()
     content = BeautifulSoup(content, 'html.parser')
 
     links = content.find_all('a')
