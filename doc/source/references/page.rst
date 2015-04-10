@@ -8,6 +8,14 @@ Overview
 .. autofunction:: WikipediaPage
 
 
+Create a page handler
+---------------------
+
+.. autosummary::
+   :toctree: generated/
+
+   WikipediaPage.fetch_from_api_title
+
 Retrieving current content and parts
 ------------------------------------
 
@@ -16,6 +24,9 @@ Retrieving current content and parts
 
    WikipediaPage.get_content
    WikipediaPage.get_links
+   WikipediaPage.get_links_title
+   WikipediaPage.get_langlinks
+   WikipediaPage.get_pageviews
 
 Retrieving revisions and diff
 -----------------------------
