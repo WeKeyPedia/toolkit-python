@@ -63,6 +63,9 @@ Retrieving and parsing diff
 
    WikipediaPage.get_diff
    WikipediaPage.get_diff_full
+   WikipediaPage.extract_plusminus
+   WikipediaPage.count_stems
+
 
 Page views
 ----------

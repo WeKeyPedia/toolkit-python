@@ -3,6 +3,7 @@ import sys
 
 # import wikipedia
 import urllib
+from collections import defaultdict
 
 try:
   from urllib.parse import unquote
@@ -11,6 +12,7 @@ except ImportError:
 
 from bs4 import BeautifulSoup
 import requests
+import nltk
 
 from colorama import Fore
 
@@ -146,7 +148,7 @@ class WikipediaPage(object):
 
   def get_revision(self, revid="", force=False, extra_params = {}):
     """
-    Get the content of a revision by its revision id
+    Retrieve the content of a revision by its revision id
 
     For more paramaters, you can check the `wikipedia API <http://www.mediawiki.org/wiki/API:Revisions>`_
     documentation.
@@ -205,7 +207,7 @@ class WikipediaPage(object):
 
   def get_current(self):
     """
-    Get the content of the current revision
+    Retrieve the content of the current revision
 
     Return
     ------
@@ -215,7 +217,7 @@ class WikipediaPage(object):
 
   def get_diff_full(self, rev_id=""):
     """
-    Return the full json response from a request for diff.
+    Retrieve the full json response from a request for diff.
 
     Parameters
     ----------
@@ -245,10 +247,23 @@ class WikipediaPage(object):
 
     return r
 
+  def extract_diff_text(self, response):
+    r = response
+
+    content = r["query"]["pages"][list(r["query"]["pages"].keys())[0]]
+    
+    if "diff" in content["revisions"][0]:
+      content = content["revisions"][0]["diff"]["*"]
+    else:
+      content = False
+    # content = BeautifulSoup(content, 'html.parser')
+
+    return content
+
   def get_diff(self, rev_id=""):
     """
-    Return diff content between a revision and its predecessor. The content is
-    extracted from the API json response. To get the full response, you can
+    Retrieve diff content between a revision and its predecessor. The content
+    is extracted from the API json response. To get the full response, you can
     still use `get_diff_full`
 
     Parameters
@@ -266,34 +281,9 @@ class WikipediaPage(object):
     get_diff_full
 
     """
-    api = API(self.lang)
+    r = self.get_diff_full(rev_id)
 
-    q = {
-      "format": "json",
-      "action": "query",
-      "titles": self.title,
-      "redirects":"true",
-      #"rvparse" : "true",
-      "prop": "info|revisions",
-      "inprop": "url",
-      # "rvlimit": 1,
-      # "rvprop": "content",
-      "rvdiffto" : "prev"
-    }
-
-    if rev_id != "":
-      q.update({ "rvlimit":1, "rvstartid": rev_id })
-
-    r = api.get(q)
-
-    content = r["query"]["pages"][list(r["query"]["pages"].keys())[0]]
-    if "diff" in content["revisions"][0]:
-      content = content["revisions"][0]["diff"]["*"]
-    else:
-      content = False
-    # content = BeautifulSoup(content, 'html.parser')
-
-    return content
+    return self.extract_diff_text(r)
 
   def get_revisions_list(self, extra_params={}):
     """
@@ -381,7 +371,7 @@ class WikipediaPage(object):
 
   def get_langlinks(self):
     """
-    Fetch the list of hyperlinks to translation of the current page
+    Retrieve the list of hyperlinks to translation of the current page
 
     Returns
     -------
@@ -490,8 +480,8 @@ class WikipediaPage(object):
 
   def get_links_title(self):
     """
-    Retrieve content of a page, extract the links and return only the titles. In
-    the wikipedia context, title attributes correspond to title of pages.
+    Retrieve content of a page, extract the links and return only the titles.
+    In the wikipedia context, title attributes correspond to title of pages.
 
     todo: make the use of `self.title` more coherent
 
@@ -513,3 +503,115 @@ class WikipediaPage(object):
     links = [ l for l in links if l != None ]
 
     return links
+
+  def normalize(self, word):
+    lemmatizer = nltk.WordNetLemmatizer()
+    stemmer = nltk.stem.porter.PorterStemmer()
+
+    word = word.lower()
+    word = stemmer.stem_word(word)
+    word = lemmatizer.lemmatize(word)
+
+    return word
+
+  def extract_plusminus(self, diff_html):
+    """
+    Transform HTML Wikipedia API response into a plus/minus dict. Information
+    extraction is made with
+    `BeautifulSoup <https://beautiful-soup-4.readthedocs.org/>`_
+
+    Parameters
+    ----------
+    diff_html : string
+
+    Return
+    ------
+    diff : dict
+      `diff` contains two keys: diff["added"] and diff["deleted"]. Each of
+      those entries correspond to blocks and inline extraction of addition,
+      deletion and substition.
+
+    See Also
+    --------
+    count_stems
+    """
+
+    diff = { "added": [], "deleted" : [] }
+
+    d = BeautifulSoup(diff_html, 'html.parser')
+
+    tr = d.find_all("tr")
+
+    for what in [ ["added", "ins"], ["deleted", "del"] ]:
+      a = []
+      
+      # checking block 
+      # we also check this is not only context showing for non-substition edits
+      a = [ t.find("td", "diff-%sline" % (what[0])) for t in tr if len(t.find_all(what[1])) == 0 and len(t.find_all("td", "diff-empty")) > 0 ]
+
+      # checking inline
+      a.extend(d.find_all(what[1]))
+
+      # filtering empty extractions
+      a = [ x for x in a if x != None ]
+
+      # registering
+      diff[what[0]] = [ tag.get_text() for tag in a ]
+
+    return diff
+
+  def count_stems(self, sentences, inflections=None):
+    """
+    Count the number of stems in a list of sentences.
+
+    An optional parameter allows to provide an inflections dictionary in order
+    to register them. It can be usefull when looking for the most used form of
+    a stem to produce more readable outputs.
+
+    This function use a dummy normalizer (`self.normalize`) that take a
+    tokenized sentences using the Punkt NTLK parser and apply a simple word
+    normalization process (lowercase, stemmization, lemmatization).
+
+    Parameters
+    ----------
+    sentences : list
+    inflections : dict, optional
+
+    Returns
+    -------
+    stems : dict
+
+    See Also
+    --------
+    extract_plusminus
+    """
+    stems = defaultdict(int)
+
+    ignore_list = "{}()[]<>./,;\"':!?&#=*&%"
+
+    for sentence in sentences:
+      for word in nltk.word_tokenize(sentence):
+        old = word
+
+        word = self.normalize(word)
+
+        if not(word in ignore_list):
+          stems[word] += 1
+
+          # keeping track of inflection usages
+          if inflections != None:
+            inflections[word].setdefault(old,0)
+            inflections[word][old] += 1
+
+    return stems
+
+  def print_plusminus_overview(self, diff):
+    for minus in diff["deleted"]:
+      print "- %s" % (minus)
+
+    for plus in diff["added"]:
+      print "+ %s" % (plus)
+
+        
+  def print_plusminus_terms_overview(self, stems):
+    print "\n%s|%s\n" % ("+"*len(stems["added"].items()), "-"*len(stems["deleted"].items()))
