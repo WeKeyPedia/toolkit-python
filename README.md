@@ -1,6 +1,37 @@
 WeKeyPedia python toolkit [![Build Status](https://travis-ci.org/WeKeyPedia/toolkit-python.svg?branch=master)](https://travis-ci.org/WeKeyPedia/toolkit-python) [![Coverage Status](https://coveralls.io/repos/WeKeyPedia/toolkit-python/badge.svg?branch=master)](https://coveralls.io/r/WeKeyPedia/toolkit-python?branch=master)
 ===================
 
+- [Documentation](http://toolkit-python.readthedocs.org/)
+
+## usage
+
+### get the current content of a page
+
+```python
+import wekeypedia
+
+p = wekeypedia.WikipediaPage("Pi")
+content = p.get_revision()
+
+print content
+```
+
+### parse diff result
+
+```python
+diff = p.get_diff()
+plusminus = p.extract_plusminus(diff)
+
+p.print_plusminus_overview(plusminus)
+```
+
+### count stems of a page
+
+```python
+print p.count_stems([ content ])
+```
+
+
 ## examples and macros
 
 You can explore the different current usages of the library by getting a look at the current we are using to build various datasets.
@@ -18,20 +49,6 @@ You can explore the different current usages of the library by getting a look at
   - fetch contents and data for the analysis of wikipedia pages involved in the current events about Crimea, Ukrain and Russia
 - **WIP** [slopes-sample.py](https://github.com/WeKeyPedia/toolkit-python/blob/master/slopes-sample.py)
   - produce the dataset for [the ski slopes UI prototype](https://github.com/WeKeyPedia/slopes-builder)
-
-## basic tasks
-
-provide a list of keywords and get the network structure from wikipedia
-
-```
-$ python retrieve_wikipedia_network.py yourdata.txt
-```
-
-fetch a list of urls from the [wekeypedia API](https://github.com/WeKeyPedia/api), get info from Wikipedia API and push it back to the wekeypedia API. last part has to be done.
-
-```
-$ python complete_info.py
-```
 
 ## using virtualenv
 
