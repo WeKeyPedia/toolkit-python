@@ -12,5 +12,5 @@ setup(
   download_url = 'https://github.com/WeKeyPedia/toolkit-python/archive/0.1.4.tar.gz', # I'll explain this in a second
   keywords = ['wikipedia', 'information retrieval', 'api', "data"], # arbitrary keywords
   classifiers = [],
-  install_requires=["nltk", "networkx", "requests", "mwparserfromhell", "colorama", "beautifulsoup"],
+  install_requires=["nltk", "networkx", "requests", "mwparserfromhell", "colorama", "beautifulsoup4"],
 )
