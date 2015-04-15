@@ -110,41 +110,34 @@ class WikipediaPage(object):
 
     return r
 
-  # def get_all_editors(self):
-  #   api = API()
+  def get_editors(self, revisions_list=[]):
+    """
+    Retrieve revisions and extract editors
 
-  #   params = {
-  #     "format": "json",
-  #     "action": "query",
-  #     "titles": self.title,
-  #     "prop": "revisions",
-  #     "rvprop": "user|userid|timestamp|size|ids|sha1",
-  #     "rvlimit": "max",
-  #     "redirects": "",
-  #     "continue": ""
-  #   }
+    Parameters
+    ----------
+    revisions_list : list, optional
+      If a list of revisions id is passed as an argument, the
+      method will filter out the revisions that are in that list
+      while still retrieving the list of all revisions firsts.
 
-  #   last = dict()
-  #   revisions = []
+      A more optimal rewriting will be to fetch only the selected
+      revisions.
 
-  #   while True:
-  #     current = params.copy()
-  #     current.update(last)
+    Returns
+    -------
+    editors : list
+    """
+    editors = []
 
-  #     r = api.get(current)
+    revisions = self.get_revisions_list()
 
-  #     pages = r["query"]["pages"]
-  #     keys = list(pages.keys())
+    if len(revisions_list) > 0:
+      revisions = [ r for r in revisions if r["revid"] in revisions_list ]
 
-  #     if ("revisions" in pages[ keys[0] ]):
-  #       # print pages[ pages.keys()[0] ]["revisions"]
-  #       revisions = revisions + pages[ keys[0] ]["revisions"]
+    editors = [ r["user"] for r in revisions ]
 
-  #     if 'continue' not in r: break
-
-  #     last = r["continue"]
-
-  #   return revisions
+    return editors
 
   def get_revision(self, revid="", force=False, extra_params = {}):
     """
@@ -265,6 +258,9 @@ class WikipediaPage(object):
     Retrieve diff content between a revision and its predecessor. The content
     is extracted from the API json response. To get the full response, you can
     still use `get_diff_full`
+
+    Examples
+    --------
 
     Parameters
     ----------

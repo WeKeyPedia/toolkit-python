@@ -39,6 +39,14 @@ Extracting parts
    WikipediaPage.get_langlinks
    WikipediaPage.get_pageviews
 
+Extracting editors
+------------------
+
+.. autosummary::
+   :toctree: generated/
+
+   WikipediaPage.get_editors
+
 Retrieving and parsing diff
 ---------------------------
 
