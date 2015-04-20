@@ -8,3 +8,4 @@ click==1.0.0
 sphinx-rtd-theme==0.1.7
 sphinxcontrib-napoleon==0.3.1
 nltk==3.0.2
+numpy==1.9.2
