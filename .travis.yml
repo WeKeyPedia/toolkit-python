@@ -10,9 +10,9 @@ install:
   - "pip install -r requirements.txt --use-mirrors"
   - "pip install coverage --use-mirrors"
   - "pip install coveralls --use-mirrors"
-  - "python -m nltk.downloader punkt wordnet"
+  - "python -m nltk.downloader punkt wordnet maxent_treebank_pos_tagger"
 
-script: 
+script:
   - nosetests
 
 after_success:
