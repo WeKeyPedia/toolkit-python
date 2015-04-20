@@ -29,8 +29,9 @@ contents:
 ---------
 .. toctree::
   :maxdepth: 2
-  
+
   references/information_retrieval
+  references/metrics
 
 installation (with virtual env)
 -------------------------------

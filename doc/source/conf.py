@@ -29,12 +29,13 @@ import wekeypedia
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',    
+    'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
+    # 'sphinx.ext.pngmath',
     'sphinxcontrib.napoleon'
 ]
 

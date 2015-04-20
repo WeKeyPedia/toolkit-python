@@ -2,9 +2,10 @@
 wikipedia page
 **************
 
+.. currentmodule:: wekeypedia.wikipedia.page
+
 Overview
 ========
-.. currentmodule:: wekeypedia.wikipedia.page
 .. autofunction:: WikipediaPage
 
 
