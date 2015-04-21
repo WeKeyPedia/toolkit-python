@@ -36,7 +36,6 @@ Extracting parts
    :toctree: generated/
 
    WikipediaPage.get_links
-   WikipediaPage.get_links_title
    WikipediaPage.get_langlinks
    WikipediaPage.get_pageviews
 

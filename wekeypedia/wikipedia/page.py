@@ -459,47 +459,54 @@ class WikipediaPage(object):
     return results
 
 
-  def get_links(self):
+  def get_links(self, extra_params={}):
     """
-    Retrieve the content from the current revision and extract the list of
-    hyperlinks (`<a>` tags) from its content.
+    Retrieve links contained by a wikipedia page according to the API
 
-    Returns
-    -------
-    links : list
-      list of links as parsed HTML. The full <a> representation is returned and
-      ready for further extraction
-    """
-    content = self.get_current()
-    content = BeautifulSoup(content, 'html.parser')
+    Parameters
+    ----------
+    extra_params : dict, optional
+      By default, the method will only retrieve links from the namespace 0
+      (usual pages) and skipped everything like templates, etc.
 
-    links = content.find_all('a')
+      You can still get `the other namespaces
+      <http://en.wikipedia.org/wiki/Wikipedia:Namespace>`_ by updating the query
+      with an extra parameters.
 
-    return links
-
-  def get_links_title(self):
-    """
-    Retrieve content of a page, extract the links and return only the titles.
-    In the wikipedia context, title attributes correspond to title of pages.
-
-    todo: make the use of `self.title` more coherent
-
-    See Also
-    --------
-    get_links
+      >>> p.get_links({ plnamspace: 12 })
 
     Returns
     -------
       links : list
-        list of titles extracted from the `title="..."` attribute of `<a>` tags
+
+    See Also
+    --------
     """
     links = []
 
-    links = self.get_links()
-    links = map(lambda x: x.get("title"), links)
+    api = API(self.lang)
 
-    links = list(set(links))
-    links = [ l for l in links if l != None ]
+    params = {
+      "format": "json",
+      "action": "query",
+      "titles": self.title,
+      "prop": "links",
+      "pllimit": 500,
+      "plnamespace": 0,
+      "continue":""
+    }
+
+    while True:
+      r = api.get(params)
+
+      l = r["query"]["pages"][ self.page_id ]["links"]
+
+      links.extend(l)
+
+      if "continue" in r:
+        params.update(r["continue"])
+      else:
+        break
 
     return links
 
