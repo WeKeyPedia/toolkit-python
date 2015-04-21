@@ -15,12 +15,6 @@ from wekeypedia.wikipedia.page import WikipediaPage
 
 #   assert page.problem == "no match"
 
-def test_links():
-  page = WikipediaPage("unit testing")
-  links = page.get_links()
-
-  assert len(links) > 0
-
 def test_instanciation():
   page = WikipediaPage("Pi")
 
@@ -60,14 +54,26 @@ def test_api_get_specific_revision():
 
   assert len(revision) > 0
 
+def test_get_links():
+  page = WikipediaPage("unit testing")
+  links = page.get_links()
 
-def test_api_langlinks():
+  assert len(links) > 0
+
+
+def test_get_langlinks():
   page = WikipediaPage("Jeu de go", lang="fr")
   langlinks = page.get_langlinks()
 
   print(langlinks)
 
   assert len(langlinks) > 10
+
+def test_get_categories():
+  page = WikipediaPage("Albert Einstein")
+  categories = page.get_categories()
+
+  assert len(categories) > 0
 
 
 def test_pageviews():

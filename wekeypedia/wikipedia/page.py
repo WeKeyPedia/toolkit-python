@@ -496,6 +496,8 @@ class WikipediaPage(object):
       "continue":""
     }
 
+    params.update(extra_params)
+
     while True:
       r = api.get(params)
 
@@ -509,6 +511,49 @@ class WikipediaPage(object):
         break
 
     return links
+
+  def get_categories(self, extra_params={}):
+    """
+    Retrieve a list of all categories used on the provided pages
+
+    Parameters
+    ----------
+    extra_params : dict, optional
+      - http://www.mediawiki.org/wiki/API:Property/Categories
+    Returns
+    -------
+      links : list
+
+    See Also
+    --------
+    """
+
+    categories = []
+
+    api = API(self.lang)
+
+    params = {
+      "format": "json",
+      "action": "query",
+      "titles": self.title,
+      "prop": "categories",
+      "cllimit": 500,
+      "continue":""
+    }
+
+    while True:
+      r = api.get(params)
+
+      c = r["query"]["pages"][ self.page_id ]["categories"]
+
+      categories.extend(c)
+
+      if "continue" in r:
+        params.update(r["continue"])
+      else:
+        break
+
+    return categories
 
   def normalize(self, word):
     lemmatizer = nltk.WordNetLemmatizer()
