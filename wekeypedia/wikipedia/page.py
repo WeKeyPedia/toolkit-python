@@ -58,7 +58,7 @@ def url2lang(url):
   """
   lang = url.split("/", 3)[2]
   lang = lang.split(".")[0]
-  
+
   return lang
 
 class WikipediaPage(object):
@@ -73,6 +73,7 @@ class WikipediaPage(object):
     self.query = None
     self.page = None
     self.problem = None
+    self.data = {}
 
     self.content = ""
 
@@ -104,6 +105,8 @@ class WikipediaPage(object):
     self.title = pages[ self.page_id ]["title"]
     self.lang = lang
     self.url = pages[ self.page_id ]["fullurl"]
+
+    self.data.update(pages[ self.page_id ])
 
     # print r.url
     # print r.text
@@ -244,7 +247,7 @@ class WikipediaPage(object):
     r = response
 
     content = r["query"]["pages"][list(r["query"]["pages"].keys())[0]]
-    
+
     if "diff" in content["revisions"][0]:
       content = content["revisions"][0]["diff"]["*"]
     else:
@@ -357,7 +360,7 @@ class WikipediaPage(object):
       page = pages[ list(pages.keys())[0] ]
 
       revisions += page["revisions"]
-      
+
       if "continue" in r:
         params.update(r["continue"])
       else:
@@ -540,8 +543,8 @@ class WikipediaPage(object):
 
     for what in [ ["added", "ins"], ["deleted", "del"] ]:
       a = []
-      
-      # checking block 
+
+      # checking block
       # we also check this is not only context showing for non-substition edits
       a = [ t.find("td", "diff-%sline" % (what[0])) for t in tr if len(t.find_all(what[1])) == 0 and len(t.find_all("td", "diff-empty")) > 0 ]
 
@@ -608,6 +611,6 @@ class WikipediaPage(object):
     for plus in diff["added"]:
       print "+ %s" % (plus)
 
-        
+
   def print_plusminus_terms_overview(self, stems):
     print "\n%s|%s\n" % ("+"*len(stems["added"].items()), "-"*len(stems["deleted"].items()))
