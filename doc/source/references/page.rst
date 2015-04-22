@@ -1,6 +1,6 @@
-**************
-wikipedia page
-**************
+****************************************************
+Retrieve and extract information of a wikipedia page
+****************************************************
 
 .. currentmodule:: wekeypedia.wikipedia.page
 
@@ -8,6 +8,9 @@ Overview
 ========
 .. autofunction:: WikipediaPage
 
+
+Methods
+=======
 
 Create a page handler
 ---------------------
@@ -29,7 +32,7 @@ Retrieving revisions
    WikipediaPage.get_revisions_list
    WikipediaPage.get_current
 
-Extracting parts
+Retrieving parts
 ----------------
 
 .. autosummary::
@@ -84,8 +87,8 @@ Page views
 
    WikipediaPage.get_pageviews
 
-helpers
-=======
+Function helpers
+================
 
 .. autofunction:: wekeypedia.wikipedia.page.url2title
 .. autofunction:: wekeypedia.wikipedia.page.url2lang

@@ -1,6 +1,6 @@
-*************
-wikipedia api
-*************
+****************************************
+Make custom queries to the wikipedia api
+****************************************
 
 Le toolkit wekeypedia inclut une classe qui permet de passer des requêtes
 plus fines et adaptées à des recherches d'information spécifiques et peu
