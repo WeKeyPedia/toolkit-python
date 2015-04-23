@@ -3,6 +3,36 @@ WeKeyPedia python toolkit [![Build Status](https://travis-ci.org/WeKeyPedia/tool
 
 - [Documentation](http://toolkit-python.readthedocs.org/)
 
+## installation
+
+### using virtualenv
+
+The pypi distribution is updated on important releases. During the development
+phase, this is approximatively every week.
+
+```
+$ mkdir e
+$ virtualenv e/py
+$ source e/py/bin/activate
+(py)$ pip install wekeypedia
+(py)$ python -m nltk.downloader punkt wordnet maxent_treebank_pos_tagger
+```
+
+### using development version
+
+If you need to get a up-to-last-second-update version, you might want to use the
+github master version. This is highly unstable. You both get work in progress
+features, their bugs and their bugfixes in realtime.
+
+```
+$ mkdir e
+$ virtualenv e/py
+$ source e/py/bin/activate
+(py)$ pip install https://github.com/wekeypedia/toolkit-python/archive/master.zip
+(py)$ python -m nltk.downloader punkt wordnet maxent_treebank_pos_tagger
+```
+
+
 ## usage
 
 ### get the current content of a page
