@@ -501,7 +501,7 @@ class WikipediaPage(object):
     while True:
       r = api.get(params)
 
-      if "link" in r["query"]["pages"][ self.page_id ]:
+      if "links" in r["query"]["pages"][ self.page_id ]:
         l = r["query"]["pages"][ self.page_id ]["links"]
         links.extend(l)
 
