@@ -544,9 +544,9 @@ class WikipediaPage(object):
     while True:
       r = api.get(params)
 
-      c = r["query"]["pages"][ self.page_id ]["categories"]
-
-      categories.extend(c)
+      if "categories" in r["query"]["pages"][ self.page_id ]:
+        c = r["query"]["pages"][ self.page_id ]["categories"]
+        categories.extend(c)
 
       if "continue" in r:
         params.update(r["continue"])
