@@ -23,6 +23,13 @@ class api:
     result : dict
     """
     r = requests.get(self.url, params=query)
-    
-    result = r.json()
+
+    try:
+      result = r.json()
+    except ValueError:
+      print self.url
+      print query
+      exit()
+
+
     return result
